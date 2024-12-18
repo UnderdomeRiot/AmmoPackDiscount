@@ -19,34 +19,35 @@ namespace underdomeriot_ammopackdiscount.Config
 
         // string UI vats
         public static int OriginalPrice = 0;                    // Variable to store the original price
+        public static int FinalPrice = 0;                       // Variable to store the final price
         public static double TotalDiscountApplied = 0;          // Variable to store the total discount applied
         public static double TotalDiscountPercentApplied = 0;   // Variable to store the total discount applied by percentage.
 
         // config temp vars
         public static ConfigEntry<int> ConfQuantityThreshold;
-        public static ConfigEntry<double> ConfDiscountRate;
-        public static ConfigEntry<double> ConfMaxDiscount;
+        public static ConfigEntry<int> ConfDiscountRate;
+        public static ConfigEntry<int> ConfMaxDiscount;
 
         public static void InitConfig(ConfigFile config)
         {
 
             ConfQuantityThreshold = config.Bind(ConfigSectionTitle, "Quantity Threshold", 30,
                 new ConfigDescription(
-                    "Items you need to buy to get a single 'Discount Rate' percentage, 30 means you need to buy 30 bullets"
+                    "Items you need to buy to get a single 'Discount Rate' percentage, 30 means you need to buy 30 bullets."
                 )
             );
 
-            ConfDiscountRate = config.Bind(ConfigSectionTitle, "Discount Rate", 0.05,
+            ConfDiscountRate = config.Bind(ConfigSectionTitle, "Discount Rate", 5,
                 new ConfigDescription(
-                    "Discount percentage for each 'Quantity Threshold', 0.05 means 5% discount, don't set 100% (1)",
-                    new AcceptableValueRange<double>(0, 1)
+                    "Discount percentage for each 'Quantity Threshold', 5 means 5% discount.",
+                    new AcceptableValueRange<int>(0, 99)
                 )
             );
 
-            ConfMaxDiscount = config.Bind(ConfigSectionTitle, "Max Discount", 0.25,
+            ConfMaxDiscount = config.Bind(ConfigSectionTitle, "Max Discount", 25,
                 new ConfigDescription(
-                    "Maximum applicable discount, 0.25 means 25%, don't set 100% (1)",
-                    new AcceptableValueRange<double>(0,1)
+                    "Maximum applicable discount, 25 means 25% max discount.",
+                    new AcceptableValueRange<int>(0, 99)
                 )                
             );
 
@@ -58,8 +59,8 @@ namespace underdomeriot_ammopackdiscount.Config
         private static void SettingChanged(object sender, EventArgs e)
         {
             QuantityThreshold = ConfQuantityThreshold.Value;
-            DiscountRate = ConfDiscountRate.Value;
-            MaxDiscount = ConfMaxDiscount.Value;
+            DiscountRate = (double) ConfDiscountRate.Value / 100;
+            MaxDiscount = (double) ConfMaxDiscount.Value / 100;
         }
     }
 }

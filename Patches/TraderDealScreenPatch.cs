@@ -8,7 +8,6 @@ using underdomeriot_ammopackdiscount.Config;
 
 namespace underdomeriot_ammopackdiscount.Patches
 {
-    // Check currency to unable bartering.
     internal class Method18Patch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
@@ -22,11 +21,9 @@ namespace underdomeriot_ammopackdiscount.Patches
             try
             {
                 AmmoPackDiscountConfig.IsValidCurrencyAndAmount = false;
-                Plugin.LogSource.LogWarning("Intercepting TraderDealScreen.method_18...");
 
                 if (!__result)
                 {
-                    Plugin.LogSource.LogWarning("TraderDealScreen.method_18 returned false. Skipping validation.");
                     return;
                 }
 
@@ -37,7 +34,7 @@ namespace underdomeriot_ammopackdiscount.Patches
                     amount > 0)
                 {
                     AmmoPackDiscountConfig.IsValidCurrencyAndAmount = true;
-                    Plugin.LogSource.LogWarning($"Valid currency ({currency}) and valid amount ({amount}) detected.");
+                    Plugin.LogSource.LogDebug($"Valid currency ({currency}) and valid amount ({amount}) detected.");
                 }
             }
             catch (Exception ex)
@@ -47,7 +44,6 @@ namespace underdomeriot_ammopackdiscount.Patches
         }        
     }
 
-    // Modifying the UI string to make it a bit more readable
     internal class FormatPricePatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
@@ -60,11 +56,9 @@ namespace underdomeriot_ammopackdiscount.Patches
         {
             try
             {
-                Plugin.LogSource.LogWarning("Intercepting TraderDealScreen.FormatPrice...");
 
                 if (!AmmoPackDiscountConfig.IsValidCurrencyAndAmount || !AmmoPackDiscountConfig.IsValidTemplate)
                 {
-                    Plugin.LogSource.LogWarning("Currency or Template is invalid. Skipping logic.");
                     return true;
                 }
 
@@ -77,7 +71,7 @@ namespace underdomeriot_ammopackdiscount.Patches
                     __result = "A LOT".Localized(null);
                 }
 
-                Plugin.LogSource.LogWarning($"Intercepted FormatPrice: Input Amount = {amount}, Result = {__result}");
+                Plugin.LogSource.LogDebug($"Intercepted FormatPrice: Input Amount = {amount}, Result = {__result}");
 
                 return false;
             }

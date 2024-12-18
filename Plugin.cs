@@ -4,29 +4,18 @@ using HarmonyLib;
 using underdomeriot_ammopackdiscount.Patches;
 using underdomeriot_ammopackdiscount.Config;
 
-// hacer los porcentajes. 
-// los literales de ragfair, añadir el % de descuento
-// poner los logs en ingles.
-// refactorizar
-// icono
-// descripcion del mod
-// subir
-
-// Este es el plugin principal que carga los parches
-
 namespace underdomeriot_ammopackdiscount
 {
-    [BepInPlugin("underdomeriot.riot.ammo.pack.discount", "underdomeriot-AmmoPackDiscount", "1.0.0")]
-    [BepInDependency("com.SPT.core", "3.10.0")]
+    [BepInPlugin("underdomeriot.riot.ammo.pack.discount", "underdomeriot-AmmoPackDiscount", "1.0.1")]
     public class Plugin : BaseUnityPlugin
     {
         public static ManualLogSource LogSource;
 
         private void Awake()
         {
-            LogSource = Logger;  // Inicialización del LogSource
+            LogSource = Logger;
 
-            LogSource.LogWarning("[AmmoPackDiscount] loading...");
+            LogSource.LogDebug("[AmmoPackDiscount] loading...");
 
             //Config
             AmmoPackDiscountConfig.InitConfig(Config);
@@ -36,12 +25,13 @@ namespace underdomeriot_ammopackdiscount
             new FormatPricePatch().Enable();
             new GClass2288Patch().Enable();
             new TraderAssortmentControllerClassPatch().Enable();
+            new PurchasePatch().Enable();
 
             //Transpiler
             var harmony = new Harmony("underdomeriot.riot.ammo.pack.discount");
-            harmony.PatchAll();  // Aplica todos los parches definidos
+            harmony.PatchAll();
 
-            LogSource.LogWarning("[AmmoPackDiscount] loaded!");
+            LogSource.LogDebug("[AmmoPackDiscount] loaded!");
         }
     }
 }
